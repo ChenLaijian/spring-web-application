@@ -24,8 +24,16 @@ import java.util.Properties;
  */
 @Configuration
 @EnableWebMvc
+//@EnableJpaRepositories(basePackages = {"com.spring.web.repository"})
 @ComponentScan(basePackages = {"com.spring.web"})
 public class WebConfig extends WebMvcConfigurerAdapter{
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(new StringHttpMessageConverter());
+        converters.add(new ByteArrayHttpMessageConverter());
+        converters.add(new FastJsonHttpMessageConverter());
+    }
 
     @Bean
     public InternalResourceViewResolver internalResourceViewResolver(){
@@ -44,12 +52,5 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         dataSource.setPassword(properties.getProperty("database.password"));
         dataSource.setUrl(properties.getProperty("database.url"));
         return new JdbcTemplate(dataSource);
-    }
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new StringHttpMessageConverter());
-        converters.add(new ByteArrayHttpMessageConverter());
-        converters.add(new FastJsonHttpMessageConverter());
     }
 }

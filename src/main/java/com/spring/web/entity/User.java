@@ -1,10 +1,18 @@
 package com.spring.web.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Created by clj on 2017/5/22.
  * Description:
  */
+@Entity
+@Table(name = "user")
 public class User {
+
+    @Id
     private String id;
 
     private String name;

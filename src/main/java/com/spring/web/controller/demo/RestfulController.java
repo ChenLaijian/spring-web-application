@@ -22,6 +22,9 @@ public class RestfulController {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+  /*  @Autowired
+    UserRepository userRepository;
+*/
     @RequestMapping("/string")
     public String getString(){
         return "hello world!";
@@ -47,4 +50,12 @@ public class RestfulController {
 
         return json;
     }
+
+    /*@RequestMapping("/mysql-jpa")
+    public JSONObject getByJPA(){
+        Iterable<User> users = userRepository.findAll();
+        JSONObject json = new JSONObject();
+        json.put("users", users);
+        return json;
+    }*/
 }
