@@ -22,6 +22,11 @@ public class RestfulController {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @RequestMapping("/exception")
+    public String getException(){
+        throw new RuntimeException("this is a runtime exception");
+    }
+
     @RequestMapping("/string")
     public String getString(){
         return "hello world!";
