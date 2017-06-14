@@ -1,6 +1,8 @@
 package com.spring.web.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.spring.web.component.AuthInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -26,6 +29,9 @@ import java.util.Properties;
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.spring.web"})
 public class WebConfig extends WebMvcConfigurerAdapter{
+
+    @Autowired
+    AuthInterceptor authInterceptor;
 
     @Bean
     public InternalResourceViewResolver internalResourceViewResolver(){
@@ -51,5 +57,10 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         converters.add(new StringHttpMessageConverter());
         converters.add(new ByteArrayHttpMessageConverter());
         converters.add(new FastJsonHttpMessageConverter());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor);
     }
 }
