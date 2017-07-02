@@ -2,6 +2,7 @@ package com.spring.web.controller.demo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.spring.web.entity.User;
+import com.spring.web.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,7 +25,7 @@ public class RestfulController {
 
     @RequestMapping("/exception")
     public String getException(){
-        throw new RuntimeException("this is a runtime exception");
+        throw new ServiceException("this is a runtime exception");
     }
 
     @RequestMapping("/string")
