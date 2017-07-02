@@ -1,37 +1,44 @@
 package com.spring.web.entity;
 
-/**
- * Created by clj on 2017/5/22.
- * Description:
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity // This tells Hibernate to make a table out of this class
 public class User {
-    private String id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id;
 
     private String name;
 
-    private int age;
+    private String email;
 
-    public String getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public int getAge() {
-        return age;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
+    
+    
 }
+

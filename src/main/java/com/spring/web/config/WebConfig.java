@@ -1,83 +1,49 @@
 package com.spring.web.config;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.spring.web.common.Result;
-import com.spring.web.common.ResultCode;
-import com.spring.web.component.AuthInterceptor;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
+import com.spring.web.entity.result.Result;
+import com.spring.web.entity.result.ResultCode;
 import com.spring.web.exception.ServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Properties;
 
 /**
- * Created by clj on 2017/5/22.
- * Description:
+ * Created by clj on 2017/7/2.
  */
 @Configuration
-@EnableWebMvc
-@ComponentScan(basePackages = {"com.spring.web"})
-public class WebConfig extends WebMvcConfigurerAdapter{
-
-    @Autowired
-    AuthInterceptor authInterceptor;
-
-    @Bean
-    public InternalResourceViewResolver internalResourceViewResolver(){
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/WEB-INF/pages/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
-
-    @Bean
-    public JdbcTemplate jdbcTemplate() throws IOException {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        Properties properties = PropertiesLoaderUtils.loadAllProperties("mysql.properties");
-        dataSource.setDriverClassName(properties.getProperty("database.driver"));
-        dataSource.setUsername(properties.getProperty("database.user"));
-        dataSource.setPassword(properties.getProperty("database.password"));
-        dataSource.setUrl(properties.getProperty("database.url"));
-        return new JdbcTemplate(dataSource);
-    }
-
+public class WebConfig extends WebMvcConfigurerAdapter {
+    //使用阿里 FastJson 作为JSON MessageConverter
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new StringHttpMessageConverter());
-        converters.add(new ByteArrayHttpMessageConverter());
-        converters.add(new FastJsonHttpMessageConverter());
+        FastJsonHttpMessageConverter4 converter = new FastJsonHttpMessageConverter4();
+        FastJsonConfig config = new FastJsonConfig();
+        config.setSerializerFeatures(SerializerFeature.WriteMapNullValue,//保留空的字段
+                SerializerFeature.WriteNullStringAsEmpty,//String null -> ""
+                SerializerFeature.WriteNullNumberAsZero);//Number null -> 0
+        converter.setFastJsonConfig(config);
+        converter.setDefaultCharset(Charset.forName("UTF-8"));
+        converters.add(converter);
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authInterceptor);
-    }
 
-
+    //统一异常处理
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-
         exceptionResolvers.add(new HandlerExceptionResolver() {
             public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
                 Result result = new Result();
@@ -99,6 +65,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
                         result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
                     } else {
                         result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage(e.getMessage());
+
                     }
                 }
                 responseResult(response, result);
@@ -107,6 +74,13 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 
         });
     }
+
+    //解决跨域问题
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        //registry.addMapping("/**");
+    }
+
 
     private void responseResult(HttpServletResponse response, Result result) {
         response.setCharacterEncoding("UTF-8");
@@ -118,4 +92,5 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 
         }
     }
+
 }
