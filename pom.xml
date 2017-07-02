@@ -8,7 +8,8 @@
     <name>spring-web-application</name>
 
     <properties>
-        <spring.version>4.1.1.RELEASE</spring.version>
+        <spring.version>4.3.9.RELEASE</spring.version>
+        <spring-data.version>Gosling-RELEASE</spring-data.version>
     </properties>
 
     <dependencies>
@@ -72,6 +73,14 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.38</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-releasetrain</artifactId>
+            <version>${spring-data.version}</version>
+            <scope>import</scope>
+            <type>pom</type>
         </dependency>
 
 
