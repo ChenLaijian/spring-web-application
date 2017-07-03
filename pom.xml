@@ -6,6 +6,7 @@
     <groupId>com.spring</groupId>
     <artifactId>spring-web-application</artifactId>
     <version>0.1.0</version>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
