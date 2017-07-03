@@ -3,6 +3,7 @@ package com.spring.web.controller.demo;
 import com.alibaba.fastjson.JSONObject;
 import com.spring.web.entity.User;
 import com.spring.web.exception.ServiceException;
+import com.spring.web.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +23,9 @@ public class RestfulController {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    UserRepository userRepository;
 
     @RequestMapping("/exception")
     public String getException(){
@@ -51,6 +55,13 @@ public class RestfulController {
         System.out.println(users.toString());
         json.put("map", users.size());
 
+        return json;
+    }
+
+    @RequestMapping("/jpa")
+    public JSONObject getUserByJPA(){
+        JSONObject json = new JSONObject();
+        json.put("users", userRepository.findAll());
         return json;
     }
 }

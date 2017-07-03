@@ -1,4 +1,4 @@
-package com.spring.web.common;
+package com.spring.web.entity.result;
 
 import com.alibaba.fastjson.JSON;
 
