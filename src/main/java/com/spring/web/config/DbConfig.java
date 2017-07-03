@@ -54,8 +54,7 @@ public class DbConfig {
         entityManagerFactoryBean
                 .setPersistenceProviderClass(HibernatePersistence.class);
         entityManagerFactoryBean
-                .setPackagesToScan("com.nd.esp.cloudaltas.business.behavior.**.model",
-                        "com.nd.esp.cloudaltas.business.insight.**.model");
+                .setPackagesToScan("com.spring.web.entity");
 
         org.springframework.core.io.Resource resource = new ClassPathResource(HIBERNATE_CONFIG);
         Properties properties = PropertiesLoaderUtils.loadProperties(resource);

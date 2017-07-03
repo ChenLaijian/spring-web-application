@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created by clj on 2017/5/22.
@@ -12,20 +13,21 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="user")
-public class User {
+public class User implements Serializable{
+    private static final long serialVersionUID = -2885918690557499966L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     private String name;
 
     private String email;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
