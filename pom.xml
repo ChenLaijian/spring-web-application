@@ -6,7 +6,7 @@
     <groupId>com.spring</groupId>
     <artifactId>spring-web-application</artifactId>
     <version>0.1.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -47,11 +47,12 @@
             <version>1.2.22</version>
         </dependency>
 
-        <dependency>
+        <!-- 部署为war包时需要 -->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 
