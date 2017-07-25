@@ -5,7 +5,7 @@ import org.springframework.validation.FieldError;
 
 /**
  * Created by clj on 2017/7/3.
- * Description:
+ * Description:配合Valid进行参数校验
  */
 public class ValidatorUtil {
     public static String getErrorMessageStr(BindingResult result) {
