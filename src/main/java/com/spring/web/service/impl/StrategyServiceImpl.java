@@ -89,7 +89,7 @@ public class StrategyServiceImpl implements StrategyService {
         }
         examStrategy.setExam_topics(examTopics);
 
-        return strategyRepository.save(examStrategy);
+        return examStrategy;
     }
 
     /**

@@ -24,6 +24,7 @@ import java.util.List;
 
 /**
  * Created by clj on 2017/7/2.
+ * Description:配置类
  */
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -59,6 +60,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                                 handlerMethod.getBean().getClass().getName(),
                                 handlerMethod.getMethod().getName(),
                                 e.getMessage());
+                        result.setMessage(message);
                     }
                 } else {
                     if (e instanceof NoHandlerFoundException) {
@@ -85,10 +87,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private void responseResult(HttpServletResponse response, Result result) {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-type", "application/json;charset=UTF-8");
-        response.setStatus(200);
+        response.setStatus(result.getCode());
         try {
             response.getWriter().write(JSON.toJSONString(result));
-        } catch (IOException ex) {
+        } catch (IOException ignore) {
 
         }
     }
