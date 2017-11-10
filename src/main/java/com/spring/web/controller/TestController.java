@@ -18,16 +18,21 @@ public class TestController {
     @RequestMapping("")
     public Object loggerTest(){
 
-
         RuntimeException runtimeException = new RuntimeException("this is a runtime error");
 
-        logger.debug("error occurred {}",runtimeException.getMessage());
+      /*  logger.debug("error occurred", runtimeException); //true
 
-        logger.debug("error occurred {}, {}", "str1", "str2");
+        logger.debug("error occurred {}", runtimeException); //true
 
-        logger.debug("error occurred{}, {}", "str1", runtimeException);
+        logger.debug("error occurred {}", "str1", runtimeException); //true
 
-        logger.debug("error occurred{}", "str1", runtimeException);
+        logger.debug("error occurred {}",runtimeException.getMessage()); //false
+
+        logger.debug("error occurred {}, {}", "str1", "str2");*/
+
+        logger.debug("error occurred {}, {}, {}", "str1", "str2", runtimeException);
+
+        logger.error("error occurred {}, {}", "str1", runtimeException);
 
         return null;
     }

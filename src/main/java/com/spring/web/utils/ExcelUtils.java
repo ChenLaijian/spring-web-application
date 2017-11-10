@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,61 +41,35 @@ public class ExcelUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ExcelUtils.class);
 
-    public static void exportExcel(OutputStream out, List<Map<String, Object>> objects) throws Exception {
+    public static void exportExcel(OutputStream out, List<List<String>> objects) throws Exception {
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet sheet = hssfWorkbook.createSheet();
 
-        List<String> headerList = new ArrayList<>();
-        headerList.add("地区编码");
-        headerList.add("地区名称");
-        headerList.add("已安装学校数");
-        headerList.add("教师数");
-        headerList.add("学生数");
 
         Map<String, HSSFCellStyle> styles = createStyles(hssfWorkbook);
 
         // 表格header
         HSSFRow titleRowFirst = sheet.createRow(0);
         int rowFirstcolumnNum = 0;
-        for (String kpiName : headerList) {
+        for (String kpiName : objects.get(0)) {
             titleRowFirst.setHeight((short) (2 * 256));
-            HSSFCell cellTitle = titleRowFirst.createCell(rowFirstcolumnNum);
+            HSSFCell cellTitle = titleRowFirst.createCell(rowFirstcolumnNum++);
             cellTitle.setCellType(HSSFCell.CELL_TYPE_STRING);
             cellTitle.setCellStyle(styles.get("cell_header_title"));
             cellTitle.setCellValue(kpiName);
-            rowFirstcolumnNum++;
         }
         // 表格内容
-        for (int i = 0; i < objects.size(); i++) {
+        for (int i = 1; i < objects.size(); i++) {
             HSSFRow row = sheet.createRow(i + 1);
-            Map<String,Object> data = objects.get(i);
-
-            HSSFCell first = row.createCell(0);
-            first.setCellType(HSSFCell.CELL_TYPE_STRING);
-            first.setCellStyle(styles.get("cell_data_default"));
-            first.setCellValue(data.get("code").toString());
-
-            HSSFCell second = row.createCell(1);
-            second.setCellType(HSSFCell.CELL_TYPE_STRING);
-            second.setCellStyle(styles.get("cell_data_default"));
-            second.setCellValue(data.get("name").toString());
-
-            HSSFCell installedCount = row.createCell(2);
-            installedCount.setCellType(HSSFCell.CELL_TYPE_STRING);
-            installedCount.setCellStyle(styles.get("cell_data_default"));
-            installedCount.setCellValue(data.get("install_count").toString());
-
-            HSSFCell students = row.createCell(4);
-            students.setCellType(HSSFCell.CELL_TYPE_STRING);
-            students.setCellStyle(styles.get("cell_data_default"));
-            students.setCellValue(data.get("student_count").toString());
-
-            HSSFCell teachers = row.createCell(3);
-            teachers.setCellType(HSSFCell.CELL_TYPE_STRING);
-            teachers.setCellStyle(styles.get("cell_data_default"));
-            teachers.setCellValue(data.get("teacher_count").toString());
+            List<String> rowStr = objects.get(i);
+            int index = 0;
+            for (String aRowStr : rowStr) {
+                HSSFCell first = row.createCell(index++);
+                first.setCellType(HSSFCell.CELL_TYPE_STRING);
+                first.setCellStyle(styles.get("cell_data_default"));
+                first.setCellValue(aRowStr);
+            }
         }
-
         try {
             hssfWorkbook.write(out);
         } catch (IOException e) {
